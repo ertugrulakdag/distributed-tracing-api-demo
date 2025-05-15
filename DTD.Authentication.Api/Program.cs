@@ -22,20 +22,36 @@ builder.Services.AddOpenTelemetry()
 .WithTracing(tracerProviderBuilder =>
 {
     tracerProviderBuilder
-    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("DTD.Authentication.Api"))
-    .AddSource("AuthenticationTracing")
-    .AddAspNetCoreInstrumentation()
-    .AddHttpClientInstrumentation()
-    .AddSqlClientInstrumentation(options =>
-    {
-        options.SetDbStatementForText = true;
-        options.RecordException = true;
-    })
-    .AddZipkinExporter(options =>
-    {
-        options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
-    });
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("DTD.Authentication.Api"))
+        .AddSource("AuthenticationTracing")
+        .AddAspNetCoreInstrumentation(options =>
+        {
+            options.Filter = httpContext =>
+            {
+                var path = httpContext.Request.Path.Value?.ToLowerInvariant().TrimEnd('/');
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    return true;
+                }
+                // Trace edilmesini istemedigin endpointler:
+                return !(path.StartsWith("/openapi") ||
+                         path.StartsWith("/docs") || 
+                         path == "/" ||
+                         path == "/favicon.ico");
+            };
+        })
+        .AddHttpClientInstrumentation()
+        .AddSqlClientInstrumentation(options =>
+        {
+            options.SetDbStatementForText = true;
+            options.RecordException = true;
+        })
+        .AddZipkinExporter(options =>
+        {
+            options.Endpoint = new Uri("http://localhost:9411/api/v2/spans");
+        });
 });
+
 builder.Services.AddHttpClient<InvoiceClient>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:6062");

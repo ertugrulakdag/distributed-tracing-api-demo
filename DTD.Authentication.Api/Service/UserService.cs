@@ -25,21 +25,25 @@ namespace DTD.Service
         {
             using var activity = AuthenticationTracing.ActivitySource.StartActivity("GetUserById Veri Hazırlama");
             activity?.SetTag("user.id", userId);
-            using var connection = await _dapperContext.CreateConnectionAsync();
-            var sql = "SELECT * FROM Users WHERE Id = @userId";
-            activity?.AddEvent(new ActivityEvent("başladı"));
+            activity?.AddEvent(new ActivityEvent($"{userId}:başladı"));
             await Task.Delay(300);
-            var user = await connection.QueryFirstOrDefaultAsync<UserDto>(sql, new { userId });
-            activity?.AddEvent(new ActivityEvent("bitti"));
+            var user= new UserDto()
+            {
+                CreatedAt = DateTime.Now,
+                Id = userId
+            };
+            activity?.AddEvent(new ActivityEvent($"{userId}:bitti"));
             return user;
         }
-public async Task<(UserDto? user, InvoiceDto? invoice, ProductDto? product)> AllDtoById(int id)
-{
-    var user = await GetUserById(id);
-    var product = await _productClient.GetProductAsync(id);
-    var invoice = await _invoiceClient.GetInvoiceAsync(id);
-    return (user, invoice, product);
-}
+        public async Task<(UserDto? user, InvoiceDto? invoice, ProductDto? product)> AllDtoById(int id)
+        {
+            using var connection = await _dapperContext.CreateConnectionAsync();
+            var sql = "SELECT * FROM Users WHERE Id = @userId";
+            var user = await connection.QueryFirstOrDefaultAsync<UserDto>(sql, new { id });
+            var product = await _productClient.GetProductAsync(id);
+            var invoice = await _invoiceClient.GetInvoiceAsync(id);
+            return (user, invoice, product);
+        }
 
     }
 }
