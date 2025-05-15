@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+	<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+	<PackageReference Include="Scalar.AspNetCore" Version="2.2.7" />
+	<PackageReference Include="OpenTelemetry.Exporter.Zipkin" Version="1.12.0" />
+	<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
+	<PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
+	<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+	<PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.12.0-beta.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DTD.Model\DTD.Model.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,6 @@
+@DTD.Invoice.Api_HostAddress = http://localhost:5288
+
+GET {{DTD.Invoice.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

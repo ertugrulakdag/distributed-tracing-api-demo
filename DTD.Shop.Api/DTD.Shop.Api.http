@@ -1,0 +1,6 @@
+@DTD.Shop.Api_HostAddress = http://localhost:5086
+
+GET {{DTD.Shop.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
