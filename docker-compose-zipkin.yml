@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      - ES_HOSTS=http://host.docker.internal:9200
+      - ZIPKIN_ELASTICSEARCH_USER=elastic         
+      - ZIPKIN_ELASTICSEARCH_PASSWORD=elastic123
+      
