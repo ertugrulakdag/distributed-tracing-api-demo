@@ -38,7 +38,7 @@ namespace DTD.Service
         public async Task<(UserDto? user, InvoiceDto? invoice, ProductDto? product)> AllDtoById(int id)
         {
             using var connection = await _dapperContext.CreateConnectionAsync();
-            var sql = "SELECT * FROM Users WHERE Id = @userId";
+            var sql = "SELECT * FROM Users WHERE Id = @id";
             var user = await connection.QueryFirstOrDefaultAsync<UserDto>(sql, new { id });
             var product = await _productClient.GetProductAsync(id);
             var invoice = await _invoiceClient.GetInvoiceAsync(id);
